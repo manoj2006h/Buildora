@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniCalc Pro - Advanced Modern Calculator</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#0b0f19',
+                            800: '#111827',
+                            700: '#1f2937',
+                            600: '#374151'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .calc-font {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        /* Custom scrollbar for history */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.3);
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(156, 163, 175, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-slate-100 dark:bg-dark-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <!-- Header / Navigation -->
+    <header class="w-full py-4 px-6 flex justify-between items-center border-b border-slate-200 dark:border-dark-700 bg-white/80 dark:bg-dark-800/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
+                <i class="fa-solid fa-calculator text-lg"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-lg tracking-tight bg-gradient-to-r from-indigo-500 to-violet-500 bg-clip-text text-transparent">OmniCalc Pro</h1>
+                <p class="text-xs text-slate-400 dark:text-slate-500">Standard • Scientific • Finance • Converter</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <!-- Sound Toggle -->
+            <button id="soundToggle" title="Toggle Sound Feedback" class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-dark-700 hover:bg-slate-300 dark:hover:bg-dark-600 flex items-center justify-center text-slate-600 dark:text-slate-300 transition">
+                <i class="fa-solid fa-volume-high" id="soundIcon"></i>
+            </button>
+            <!-- Theme Toggle -->
+            <button id="themeToggle" title="Toggle Theme" class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-dark-700 hover:bg-slate-300 dark:hover:bg-dark-600 flex items-center justify-center text-slate-600 dark:text-slate-300 transition">
+                <i class="fa-solid fa-moon" id="themeIcon"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow flex items-center justify-center p-3 sm:p-6">
+        <div class="w-full max-w-4xl bg-white dark:bg-dark-800 rounded-3xl shadow-2xl border border-slate-200/80 dark:border-dark-700 overflow-hidden flex flex-col lg:flex-row transition-all duration-300">
+            
+            <!-- Left / Main Calculator Section -->
+            <div class="flex-1 p-5 sm:p-8 flex flex-col">
+                
+                <!-- Mode Selector Tabs -->
+                <div class="flex bg-slate-100 dark:bg-dark-900 p-1.5 rounded-2xl mb-6 text-sm font-medium">
+                    <button data-mode="standard" class="calc-mode-btn flex-1 py-2 rounded-xl transition bg-white dark:bg-dark-700 shadow-sm text-indigo-600 dark:text-indigo-400 font-semibold">Standard</button>
+                    <button data-mode="scientific" class="calc-mode-btn flex-1 py-2 rounded-xl transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Scientific</button>
+                    <button data-mode="finance" class="calc-mode-btn flex-1 py-2 rounded-xl transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Finance</button>
+                    <button data-mode="converter" class="calc-mode-btn flex-1 py-2 rounded-xl transition text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200">Convert</button>
+                </div>
+
+                <!-- STANDARD & SCIENTIFIC CALCULATOR VIEW -->
+                <div id="calculatorView" class="flex flex-col flex-grow">
+                    <!-- Display Screen -->
+                    <div class="bg-slate-50 dark:bg-dark-900 rounded-2xl p-4 sm:p-5 mb-5 border border-slate-200 dark:border-dark-700/60 shadow-inner flex flex-col justify-between">
+                        <!-- Top info row (Angle mode / memory) -->
+                        <div class="flex justify-between items-center text-xs text-slate-400 dark:text-slate-500 mb-2">
+                            <div class="flex space-x-3">
+                                <span id="angleModeDisplay" class="font-semibold uppercase tracking-wider text-indigo-500 dark:text-indigo-400 cursor-pointer hover:underline" title="Click to toggle Deg/Rad">DEG</span>
+                                <span id="memoryIndicator" class="hidden font-semibold text-emerald-500">M: <span id="memoryValue">0</span></span>
+                            </div>
+                            <div id="expressionPreview" class="calc-font truncate max-w-[200px] sm:max-w-[300px]"></div>
+                        </div>
+                        <!-- Main Result Display -->
+                        <div class="text-right">
+                            <div id="calcHistorySub" class="calc-font text-xs sm:text-sm text-slate-400 dark:text-slate-500 h-6 truncate"></div>
+                            <div id="calcDisplay" class="calc-font text-3xl sm:text-5xl font-bold tracking-tight text-slate-900 dark:text-white truncate">0</div>
+                        </div>
+                    </div>
+
+                    <!-- Keypads Container -->
+                    <div class="grid grid-cols-4 gap-2.5 sm:gap-3">
+                        
+                        <!-- Scientific Row (Hidden by default, shown in scientific mode) -->
+                        <div id="scientificKeypad" class="col-span-4 grid grid-cols-5 gap-2.5 sm:gap-3 hidden mb-1 pb-3 border-b border-slate-200 dark:border-dark-700">
+                            <button data-action="sci" data-val="sin" class="sci-btn py-2.5 rounded-xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 transition">sin</button>
+                            <button data-action="sci" data-val="cos" class="sci-btn py-2.5 rounded-xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 transition">cos</button>
+                            <button data-action="sci" data-val="tan" class="sci-btn py-2.5 rounded-xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 transition">tan</button>
+                            <button data-action="sci" data-val="log" class="sci-btn py-2.5 rounded-xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 transition">log</button>
+                            <button data-action="sci" data-val="ln" class="sci-btn py-2.5 rounded-xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 transition">ln</button>
+                            
+                            <button data-action="sci" data-val="sqrt" class="sci-btn py-2.5 rounded-xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 transition">√x</button>
+                            <button data-action="sci" data-val="pow" class="sci-btn py-2.5 rounded-xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 transition">x^y</button>
+                            <button data-action="sci" data-val="pi" class="sci-btn py-2.5 rounded-xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 transition">π</button>
+                            <button data-action="sci" data-val="e" class="sci-btn py-2.5 rounded-xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 transition">e</button>
+                            <button data-action="sci" data-val="fact" class="sci-btn py-2.5 rounded-xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-medium text-indigo-600 dark:text-indigo-400 transition">n!</button>
+                        </div>
+
+                        <!-- Row 1: Memory & Clear -->
+                        <button data-action="memory" data-val="mc" class="py-3 rounded-2xl bg-slate-100 dark:bg-dark-700/60 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400 transition">MC</button>
+                        <button data-action="memory" data-val="mr" class="py-3 rounded-2xl bg-slate-100 dark:bg-dark-700/60 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400 transition">MR</button>
+                        <button data-action="memory" data-val="mplus" class="py-3 rounded-2xl bg-slate-100 dark:bg-dark-700/60 hover:bg-slate-200 dark:hover:bg-dark-600 text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400 transition">M+</button>
+                        <button data-action="clear" class="py-3 rounded-2xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/40 text-rose-600 dark:text-rose-400 font-bold transition">AC</button>
+
+                        <!-- Row 2 -->
+                        <button data-action="paren" data-val="(" class="py-3.5 rounded-2xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 font-semibold text-slate-600 dark:text-slate-300 transition">(</button>
+                        <button data-action="paren" data-val=")" class="py-3.5 rounded-2xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 font-semibold text-slate-600 dark:text-slate-300 transition">)</button>
+                        <button data-action="percent" class="py-3.5 rounded-2xl bg-slate-100 dark:bg-dark-700 hover:bg-slate-200 dark:hover:bg-dark-600 font-semibold text-slate-600 dark:text-slate-300 transition">%</button>
+                        <button data-action="operator" data-val="/" class="py-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 font-bold text-indigo-600 dark:text-indigo-400 transition text-lg">÷</button>
+
+                        <!-- Row 3 -->
+                        <button data-action="num" data-val="7" class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-bold text-lg text-slate-800 dark:text-slate-200 transition">7</button>
+                        <button data-action="num" data-val="8" class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-bold text-lg text-slate-800 dark:text-slate-200 transition">8</button>
+                        <button data-action="num" data-val="9" class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-bold text-lg text-slate-800 dark:text-slate-200 transition">9</button>
+                        <button data-action="operator" data-val="*" class="py-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 font-bold text-indigo-600 dark:text-indigo-400 transition text-lg">×</button>
+
+                        <!-- Row 4 -->
+                        <button data-action="num" data-val="4" class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-bold text-lg text-slate-800 dark:text-slate-200 transition">4</button>
+                        <button data-action="num" data-val="5" class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-bold text-lg text-slate-800 dark:text-slate-200 transition">5</button>
+                        <button data-action="num" data-val="6" class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-bold text-lg text-slate-800 dark:text-slate-200 transition">6</button>
+                        <button data-action="operator" data-val="-" class="py-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 font-bold text-indigo-600 dark:text-indigo-400 transition text-lg">-</button>
+
+                        <!-- Row 5 -->
+                        <button data-action="num" data-val="1" class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-bold text-lg text-slate-800 dark:text-slate-200 transition">1</button>
+                        <button data-action="num" data-val="2" class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-bold text-lg text-slate-800 dark:text-slate-200 transition">2</button>
+                        <button data-action="num" data-val="3" class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-bold text-lg text-slate-800 dark:text-slate-200 transition">3</button>
+                        <button data-action="operator" data-val="+" class="py-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 font-bold text-indigo-600 dark:text-indigo-400 transition text-lg">+</button>
+
+                        <!-- Row 6 -->
+                        <button data-action="sign" class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-semibold text-slate-700 dark:text-slate-300 transition">±</button>
+                        <button data-action="num" data-val="0" class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-bold text-lg text-slate-800 dark:text-slate-200 transition">0</button>
+                        <button data-action="decimal" data-val="." class="py-3.5 rounded-2xl bg-slate-50 dark:bg-dark-700/40 hover:bg-slate-200 dark:hover:bg-dark-600 font-bold text-lg text-slate-800 dark:text-slate-200 transition">.</button>
+                        <button data-action="calculate" class="py-3.5 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-500 hover:from-indigo-500 hover:to-violet-400 text-white font-bold shadow-lg shadow-indigo-500/30 transition text-lg">=</button>
+                    </div>
+                </div>
+
+                <!-- FINANCE CALCULATOR VIEW -->
+                <div id="financeView" class="hidden flex flex-col flex-grow space-y-4">
+                    <h2 class="text-lg font-bold text-slate-800 dark:text-white mb-2 flex items-center">
+                        <i class="fa-solid fa-piggy-bank mr-2 text-indigo-500"></i> Loan & Mortgage Calculator
+                    </h2>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Loan Amount ($)</label>
+                        <input type="number" id="loanAmount" value="250000" class="w-full bg-slate-50 dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 calc-font focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Interest Rate (%)</label>
+                            <input type="number" step="0.1" id="loanRate" value="6.5" class="w-full bg-slate-50 dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 calc-font focus:outline-none focus:border-indigo-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Term (Years)</label>
+                            <input type="number" id="loanTerm" value="30" class="w-full bg-slate-50 dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 calc-font focus:outline-none focus:border-indigo-500">
+                        </div>
+                    </div>
+                    <button id="calculateLoan" class="w-full py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold shadow-lg shadow-indigo-500/20 transition mt-2">Calculate Monthly Payment</button>
+                    
+                    <div id="loanResult" class="hidden bg-slate-50 dark:bg-dark-900 rounded-2xl p-5 border border-slate-200 dark:border-dark-700 mt-4 space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-400">Monthly Payment:</span>
+                            <span id="monthlyPayment" class="calc-font text-xl font-bold text-indigo-500">$0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-400">Total Interest:</span>
+                            <span id="totalInterest" class="calc-font text-sm font-semibold text-slate-700 dark:text-slate-300">$0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-slate-400">Total Payment:</span>
+                            <span id="totalPayment" class="calc-font text-sm font-semibold text-slate-700 dark:text-slate-300">$0.00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- UNIT CONVERTER VIEW -->
+                <div id="converterView" class="hidden flex flex-col flex-grow space-y-4">
+                    <h2 class="text-lg font-bold text-slate-800 dark:text-white mb-2 flex items-center">
+                        <i class="fa-solid fa-right-left mr-2 text-indigo-500"></i> Unit Converter
+                    </h2>
+                    <div class="flex bg-slate-100 dark:bg-dark-900 p-1 rounded-xl text-xs font-medium mb-2">
+                        <button data-cunit="length" class="cunit-tab flex-1 py-2 rounded-lg bg-white dark:bg-dark-700 shadow-sm text-indigo-600 dark:text-indigo-400">Length</button>
+                        <button data-cunit="weight" class="cunit-tab flex-1 py-2 rounded-lg text-slate-500 dark:text-slate-400">Weight</button>
+                        <button data-cunit="temp" class="cunit-tab flex-1 py-2 rounded-lg text-slate-500 dark:text-slate-400">Temp</button>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label id="fromUnitLabel" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">From (Meters)</label>
+                            <input type="number" id="fromValue" value="1" class="w-full bg-slate-50 dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 calc-font focus:outline-none focus:border-indigo-500">
+                            <select id="fromUnitSelect" class="w-full mt-2 bg-slate-50 dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl px-3 py-2 text-sm focus:outline-none">
+                                <option value="m">Meter (m)</option>
+                                <option value="km">Kilometer (km)</option>
+                                <option value="cm">Centimeter (cm)</option>
+                                <option value="mm">Millimeter (mm)</option>
+                                <option value="mi">Mile (mi)</option>
+                                <option value="ft">Foot (ft)</option>
+                                <option value="in">Inch (in)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label id="toUnitLabel" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">To (Feet)</label>
+                            <input type="number" id="toValue" readonly class="w-full bg-slate-50 dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl px-4 py-3 calc-font text-indigo-500 font-bold">
+                            <select id="toUnitSelect" class="w-full mt-2 bg-slate-50 dark:bg-dark-900 border border-slate-200 dark:border-dark-700 rounded-xl px-3 py-2 text-sm focus:outline-none">
+                                <option value="ft">Foot (ft)</option>
+                                <option value="m">Meter (m)</option>
+                                <option value="km">Kilometer (km)</option>
+                                <option value="cm">Centimeter (cm)</option>
+                                <option value="mm">Millimeter (mm)</option>
+                                <option value="mi">Mile (mi)</option>
+                                <option value="in">Inch (in)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right / History & Quick Tools Sidebar -->
+            <div class="w-full lg:w-80 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-dark-700 p-5 sm:p-6 flex flex-col bg-slate-50/50 dark:bg-dark-900/30">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-sm tracking-wide text-slate-700 dark:text-slate-300 flex items-center">
+                        <i class="fa-solid fa-clock-rotate-left mr-2 text-indigo-500"></i> Calculation History
+                    </h3>
+                    <button id="clearHistory" title="Clear History" class="text-xs text-rose-500 hover:text-rose-600 font-semibold transition">
+                        <i class="fa-solid fa-trash-can"></i> Clear
+                    </button>
+                </div>
+                
+                <!-- History List -->
+                <div id="historyList" class="flex-grow overflow-y-auto max-h-[250px] lg:max-h-[380px] space-y-2 mb-4 pr-1">
+                    <div id="emptyHistory" class="text-center text-slate-400 dark:text-slate-600 py-12 text-xs">
+                        <i class="fa-solid fa-receipt text-2xl mb-2 block opacity-40"></i>
+                        No calculation history yet
+                    </div>
+                </div>
+
+                <!-- Quick Tip / Copy Banner -->
+                <div class="bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/50 rounded-2xl p-3.5 text-xs text-indigo-600 dark:text-indigo-400 flex items-start space-x-3">
+                    <i class="fa-solid fa-lightbulb text-base mt-0.5"></i>
+                    <div>
+                        <span class="font-semibold block mb-0.5">Pro Tip</span>
+                        You can use your keyboard to type expressions, press <kbd class="px-1 py-0.5 bg-indigo-100 dark:bg-indigo-900 rounded font-mono">Enter</kbd> to calculate, and <kbd class="px-1 py-0.5 bg-indigo-100 dark:bg-indigo-900 rounded font-mono">Esc</kbd> to clear.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-4 text-center text-xs text-slate-400 dark:text-slate-500 border-t border-slate-200 dark:border-dark-700">
+        OmniCalc Pro &copy; 2025 • Designed with Precision & Modern UI
+    </footer>
+
+    <!-- JavaScript Link -->
+    <script src="script.js"></script>
+</body>
+</html>
