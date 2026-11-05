@@ -89,6 +89,12 @@ function App() {
             <textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  if (!loading) handleGenerate();
+                }
+              }}
               placeholder="Describe the website you want to build..."
               className="w-full h-32 bg-transparent outline-none resize-none text-white placeholder:text-slate-500"
             />
