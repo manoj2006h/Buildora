@@ -1,4 +1,8 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+// Backend URL. Override with VITE_API_URL when the API is on another origin.
+const API_BASE =
+  import.meta.env.VITE_API_URL ?? "http://localhost:5001";
 
 function App() {
   const [prompt, setPrompt] = useState("");
@@ -9,19 +13,110 @@ function App() {
   const [publishing, setPublishing] = useState(false);
   const [publishedUrl, setPublishedUrl] = useState("");
   const [publishError, setPublishError] = useState("");
+  const [progress, setProgress] = useState([]);
+  const [elapsed, setElapsed] = useState(0);
+
+  const abortRef = useRef(null);
+  const progressIdRef = useRef(0);
+
+  // Tick the elapsed timer while a generation is running
+  useEffect(() => {
+    if (!loading) return undefined;
+
+    const timer = setInterval(() => {
+      setElapsed((seconds) => seconds + 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [loading]);
+
+  const pushProgress = (message, { active = true, ok = true } = {}) => {
+    progressIdRef.current += 1;
+
+    const id = progressIdRef.current;
+
+    setProgress((prev) => [
+      ...prev.map((item) => ({ ...item, active: false })),
+      { id, message, active, ok },
+    ]);
+  };
+
+  const finishActiveStep = (ok, message) => {
+    setProgress((prev) => {
+      const next = [...prev];
+
+      for (let i = next.length - 1; i >= 0; i -= 1) {
+        if (next[i].active) {
+          next[i] = {
+            ...next[i],
+            active: false,
+            ok,
+            message: message || next[i].message,
+          };
+          break;
+        }
+      }
+
+      return next;
+    });
+  };
+
+  const handleProgressEvent = (event) => {
+    if (event.type === "start") {
+      pushProgress(event.message || "Starting Buildora…");
+      return;
+    }
+
+    if (event.type === "progress") {
+      if (event.phase === "tool" && event.status === "start") {
+        pushProgress(event.message);
+      } else if (event.phase === "tool" && event.status === "done") {
+        finishActiveStep(
+          event.ok !== false,
+          event.ok === false ? event.message : undefined
+        );
+      } else if (event.phase === "final") {
+        pushProgress(event.message || "Finalising the website…");
+      } else if (event.phase === "limit" || event.phase === "cancelled") {
+        pushProgress(event.message);
+      }
+
+      return;
+    }
+
+    if (event.type === "error") {
+      setResponse(event.message || "Something went wrong.");
+      setProgress((prev) => prev.map((item) => ({ ...item, active: false })));
+      return;
+    }
+
+    if (event.type === "done") {
+      setResponse(event.result || "");
+      setPreviewUrl(event.previewUrl || "");
+      setProjectId(event.projectId || "");
+      setProgress((prev) => prev.map((item) => ({ ...item, active: false })));
+    }
+  };
 
   const handleGenerate = async () => {
-    if (!prompt.trim()) return;
+    if (!prompt.trim() || loading) return;
+
+    const controller = new AbortController();
+
+    abortRef.current = controller;
 
     try {
       setLoading(true);
+      setElapsed(0);
       setResponse("");
       setPreviewUrl("");
       setProjectId("");
       setPublishedUrl("");
       setPublishError("");
+      setProgress([]);
+      progressIdRef.current = 0;
 
-      const res = await fetch("http://localhost:5001/api/generate", {
+      const res = await fetch(`${API_BASE}/api/generate/stream`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -29,25 +124,74 @@ function App() {
         body: JSON.stringify({
           prompt: prompt,
         }),
+        signal: controller.signal,
       });
 
-      const data = await res.json();
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
 
-      if (data.success) {
-        setResponse(data.result);
+        throw new Error(
+          data.error || `Request failed (${res.status})`
+        );
+      }
 
-        // Use the unique project URL returned by backend
-        setPreviewUrl(data.previewUrl);
-        setProjectId(data.projectId);
-      } else {
-        setResponse(data.error || "Something went wrong.");
+      if (!res.body) {
+        throw new Error("Streaming is not supported by this browser.");
+      }
+
+      // Read the SSE stream chunk by chunk
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        const chunks = buffer.split("\n\n");
+
+        buffer = chunks.pop() ?? "";
+
+        for (const chunk of chunks) {
+          const dataLine = chunk
+            .split("\n")
+            .find((line) => line.startsWith("data:"));
+
+          if (!dataLine) continue;
+
+          const raw = dataLine.slice(5).trim();
+
+          if (!raw) continue;
+
+          try {
+            handleProgressEvent(JSON.parse(raw));
+          } catch (error) {
+            console.error("Invalid progress event:", raw, error);
+          }
+        }
       }
     } catch (error) {
-      console.error(error);
-      setResponse("Failed to connect to ManojAI backend.");
+      if (error.name === "AbortError") {
+        setResponse("Generation cancelled.");
+        pushProgress("Generation cancelled.", { active: false, ok: false });
+      } else {
+        console.error(error);
+        setResponse(
+          error.message || "Failed to connect to Buildora backend."
+        );
+      }
     } finally {
       setLoading(false);
+      abortRef.current = null;
     }
+  };
+
+  const handleCancel = () => {
+    abortRef.current?.abort();
   };
 
   const handlePublish = async () => {
@@ -58,7 +202,7 @@ function App() {
       setPublishedUrl("");
       setPublishError("");
 
-      const res = await fetch("http://localhost:5001/api/publish", {
+      const res = await fetch(`${API_BASE}/api/publish`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -77,11 +221,13 @@ function App() {
       }
     } catch (error) {
       console.error(error);
-      setPublishError("Failed to connect to ManojAI backend.");
+      setPublishError("Failed to connect to Buildora backend.");
     } finally {
       setPublishing(false);
     }
   };
+
+  const showProgress = loading || progress.length > 0;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
@@ -157,6 +303,80 @@ function App() {
             </div>
 
           </div>
+
+          {/* Build Progress */}
+          {showProgress && (
+            <div className="mt-5 p-4 rounded-xl bg-slate-900 border border-slate-800">
+
+              <div className="flex items-center justify-between mb-3">
+
+                <div className="flex items-center gap-2 text-sm font-medium text-slate-200">
+                  <span
+                    className={`h-2 w-2 rounded-full ${
+                      loading
+                        ? "bg-blue-500 animate-pulse"
+                        : "bg-emerald-500"
+                    }`}
+                  ></span>
+
+                  <span>
+                    {loading ? "Building your website..." : "Build complete"}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-slate-500">
+                    {elapsed}s
+                  </span>
+
+                  {loading && (
+                    <button
+                      onClick={handleCancel}
+                      className="text-xs px-3 py-1.5 rounded-lg border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white transition"
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+
+              </div>
+
+              <ol className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                {progress.map((item) => (
+                  <li key={item.id} className="flex items-start gap-2 text-sm">
+
+                    <span
+                      className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border text-[10px] ${
+                        item.active
+                          ? "border-blue-500 text-blue-400"
+                          : item.ok === false
+                            ? "border-red-600 text-red-400"
+                            : "border-emerald-600 text-emerald-400"
+                      }`}
+                    >
+                      {item.active ? (
+                        <span className="h-1.5 w-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+                      ) : item.ok === false ? (
+                        "!"
+                      ) : (
+                        "✓"
+                      )}
+                    </span>
+
+                    <span
+                      className={
+                        item.active ? "text-slate-200" : "text-slate-400"
+                      }
+                    >
+                      {item.message}
+                    </span>
+
+                  </li>
+                ))}
+              </ol>
+
+            </div>
+          )}
 
           {/* Response */}
           {response && (

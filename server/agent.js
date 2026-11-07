@@ -105,13 +105,137 @@ const availableTools = {
 
 
 // ==========================================
+// Turn a shell command into a short, human-readable status
+// ==========================================
+
+function describeCommand(command) {
+
+    const raw = String(command || "").trim();
+
+    const firstLine = raw.split("\n")[0].trim();
+
+    const clean = (value) =>
+        value.replace(/^['"]|['"]$/g, "").trim();
+
+    if (!raw) {
+        return "Running command";
+    }
+
+    // mkdir
+    let match = firstLine.match(/^mkdir\s+(?:-p\s+)?(.+)$/);
+
+    if (match) {
+        return `Creating folder ${clean(match[1])}`;
+    }
+
+    // Heredoc with the redirect before the marker:  cat > file << 'EOF'
+    match = raw.match(/>>?\s*['"]?([^\s'"]+)[\s\S]*?<<\s*['"]?[A-Za-z]+['"]?/);
+
+    if (match) {
+        return `Writing ${clean(match[1])}`;
+    }
+
+    // Heredoc with the redirect after the marker:  cat << 'EOF' > file
+    match = raw.match(/<<\s*['"]?[A-Za-z]+['"]?[\s\S]*?>>?\s*['"]?([^\s'"]+)/);
+
+    if (match) {
+        return `Writing ${clean(match[1])}`;
+    }
+
+    // cat/printf/echo redirected to a file
+    match = raw.match(/(?:cat|printf|echo)\b[\s\S]*?>>?\s*['"]?([^\s'"]+)/);
+
+    if (match) {
+        return `Writing ${clean(match[1])}`;
+    }
+
+    // tee file
+    match = firstLine.match(/\btee\s+(?:-a\s+)?['"]?([^\s'"]+)/);
+
+    if (match) {
+        return `Writing ${clean(match[1])}`;
+    }
+
+    // touch file
+    match = firstLine.match(/^touch\s+(.+)$/);
+
+    if (match) {
+        return `Creating ${clean(match[1])}`;
+    }
+
+    // rm
+    match = firstLine.match(/^rm\s+(?:-rf?\s+)?(.+)$/);
+
+    if (match) {
+        return `Removing ${clean(match[1])}`;
+    }
+
+    // mv
+    match = firstLine.match(/^mv\s+(.+)$/);
+
+    if (match) {
+        return `Moving ${clean(match[1])}`;
+    }
+
+    // sed -i
+    match = firstLine.match(/^sed\s+-i.*?\s+['"]?([^\s'"]+)$/);
+
+    if (match) {
+        return `Editing ${clean(match[1])}`;
+    }
+
+    if (/^ls\b/.test(firstLine)) {
+        return "Inspecting project files";
+    }
+
+    if (/^cat\b/.test(firstLine)) {
+        return "Reading project files";
+    }
+
+    if (/^pwd\b/.test(firstLine)) {
+        return "Checking workspace";
+    }
+
+    const short = firstLine.length > 90
+        ? `${firstLine.slice(0, 90)}…`
+        : firstLine;
+
+    return short || "Running command";
+}
+
+
+// ==========================================
 // Main ManojAI Agent
 // ==========================================
 
-export async function runAgent(userProblem, projectPath) {
+export async function runAgent(
+    userProblem,
+    projectPath,
+    {
+        onProgress = () => {},
+        shouldAbort = () => false,
+        maxSteps = 60,
+    } = {}
+) {
 
     // Each request gets its own history
     const History = [];
+
+    // Progress is best-effort: a broken callback must never break generation
+    const emit = (event) => {
+        try {
+            onProgress(event);
+        } catch (error) {
+            console.error("Progress callback error:", error.message);
+        }
+    };
+
+    let step = 0;
+
+    emit({
+        phase: "start",
+        message: "Understanding your request…",
+    });
 
 
     // ==========================================
@@ -137,6 +261,32 @@ export async function runAgent(userProblem, projectPath) {
     while (true) {
 
         try {
+
+            if (shouldAbort()) {
+                emit({
+                    phase: "cancelled",
+                    message: "Generation cancelled.",
+                });
+
+                return "Generation cancelled by the user.";
+            }
+
+            if (step >= maxSteps) {
+                emit({
+                    phase: "limit",
+                    message: `Reached the ${maxSteps}-step limit.`,
+                });
+
+                return "ManojAI stopped after reaching the maximum number of steps.";
+            }
+
+            step += 1;
+
+            emit({
+                phase: "thinking",
+                step,
+                message: "Planning the next step…",
+            });
 
             const response = await ai.models.generateContent({
 
@@ -693,6 +843,10 @@ Everything must remain inside this directory.
 
                     const tool = availableTools[name];
 
+                    const detail = name === "executeCommand"
+                        ? describeCommand(args?.command)
+                        : `Running ${name}`;
+
 
                     // ==========================================
                     // Unknown Tool
@@ -725,12 +879,27 @@ Everything must remain inside this directory.
                     // Execute Tool
                     // ==========================================
 
+                    emit({
+                        phase: "tool",
+                        step,
+                        status: "start",
+                        message: detail,
+                    });
+
                     try {
 
                         const result = await tool(
                             args,
                             projectPath
                         );
+
+                        emit({
+                            phase: "tool",
+                            step,
+                            status: "done",
+                            ok: true,
+                            message: detail,
+                        });
 
 
                         console.log("\nTool Result:");
@@ -755,6 +924,14 @@ Everything must remain inside this directory.
 
 
                     } catch (error) {
+
+                        emit({
+                            phase: "tool",
+                            step,
+                            status: "done",
+                            ok: false,
+                            message: `Failed: ${detail}`,
+                        });
 
                         const result =
                             `Tool execution error: ${error.message}`;
@@ -808,6 +985,11 @@ Everything must remain inside this directory.
 
                 console.log("\nAI:");
                 console.log(response.text);
+
+                emit({
+                    phase: "final",
+                    message: "Finalising the website…",
+                });
 
 
                 History.push({
