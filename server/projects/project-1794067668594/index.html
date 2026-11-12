@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saffron & Stone | Artisanal Dining & Bar</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        },
+                        stone: {
+                            850: '#1c1917',
+                            900: '#1c1917',
+                            950: '#0c0a09',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-stone-950 text-stone-200 font-sans antialiased selection:bg-amber-600 selection:text-white">
+
+    <!-- TOP BAR -->
+    <div class="bg-stone-900 border-b border-stone-800 text-xs py-2 px-4 sm:px-8 text-stone-400">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div class="flex items-center gap-6">
+                <span class="flex items-center gap-2"><i class="fa-solid fa-location-dot text-amber-600"></i> 742 Evergreen Terrace, Culinary District</span>
+                <span class="hidden md:flex items-center gap-2"><i class="fa-solid fa-clock text-amber-600"></i> Tue-Sun: 5:00 PM - 11:00 PM</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="tel:+15554328900" class="hover:text-amber-500 transition"><i class="fa-solid fa-phone text-amber-600 mr-1"></i> (555) 432-8900</a>
+                <div class="flex items-center gap-3 border-l border-stone-800 pl-4">
+                    <a href="#" class="hover:text-amber-500 transition"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="hover:text-amber-500 transition"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="hover:text-amber-500 transition"><i class="fa-brands fa-tripadvisor"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav id="navbar" class="sticky top-0 z-50 transition-all duration-300 bg-stone-950/90 backdrop-blur-md border-b border-stone-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-full bg-amber-600 flex items-center justify-center text-stone-950 font-serif font-bold text-xl group-hover:scale-105 transition shadow-lg shadow-amber-600/20">
+                    S
+                </div>
+                <div>
+                    <span class="font-serif text-2xl font-bold tracking-wider text-white block leading-none">SAFFRON</span>
+                    <span class="text-[10px] tracking-[0.3em] text-amber-500 uppercase font-semibold"> & Stone </span>
+                </div>
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center gap-8 text-sm font-medium">
+                <a href="#home" class="text-amber-500 hover:text-amber-400 transition">Home</a>
+                <a href="#about" class="text-stone-300 hover:text-amber-500 transition">Our Story</a>
+                <a href="#menu" class="text-stone-300 hover:text-amber-500 transition">Menu</a>
+                <a href="#experience" class="text-stone-300 hover:text-amber-500 transition">Experience</a>
+                <a href="#reviews" class="text-stone-300 hover:text-amber-500 transition">Reviews</a>
+                <a href="#contact" class="text-stone-300 hover:text-amber-500 transition">Contact & Hours</a>
+            </div>
+
+            <!-- Actions -->
+            <div class="hidden sm:flex items-center gap-4">
+                <button onclick="openCartModal()" class="relative p-2.5 text-stone-300 hover:text-amber-500 transition bg-stone-900 rounded-full border border-stone-800">
+                    <i class="fa-solid fa-bag-shopping text-lg"></i>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                </button>
+                <a href="#reservation" class="bg-amber-600 hover:bg-amber-500 text-stone-950 font-semibold px-6 py-3 rounded-full transition shadow-lg shadow-amber-600/20 text-sm tracking-wide uppercase">
+                    Book Table
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="flex items-center gap-3 lg:hidden">
+                <button onclick="openCartModal()" class="relative p-2 text-stone-300 hover:text-amber-500 transition bg-stone-900 rounded-full border border-stone-800">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span id="cart-badge-mobile" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[9px] font-bold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </button>
+                <button id="mobile-menu-btn" class="text-stone-300 hover:text-white p-2 text-xl">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-stone-900 border-b border-stone-800 px-6 py-6 space-y-4">
+            <a href="#home" class="block text-amber-500 font-medium py-2 border-b border-stone-800/50">Home</a>
+            <a href="#about" class="block text-stone-300 hover:text-amber-500 font-medium py-2 border-b border-stone-800/50">Our Story</a>
+            <a href="#menu" class="block text-stone-300 hover:text-amber-500 font-medium py-2 border-b border-stone-800/50">Menu</a>
+            <a href="#experience" class="block text-stone-300 hover:text-amber-500 font-medium py-2 border-b border-stone-800/50">Experience</a>
+            <a href="#reviews" class="block text-stone-300 hover:text-amber-500 font-medium py-2 border-b border-stone-800/50">Reviews</a>
+            <a href="#contact" class="block text-stone-300 hover:text-amber-500 font-medium py-2 border-b border-stone-800/50">Contact & Hours</a>
+            <div class="pt-2">
+                <a href="#reservation" class="block text-center bg-amber-600 hover:bg-amber-500 text-stone-950 font-semibold px-6 py-3 rounded-full transition uppercase text-sm">
+                    Book Table
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-stone-950 py-20">
+        <!-- Background Image with Gradient Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1920&auto=format&fit=crop" alt="Fine dining steak and ambiance" class="w-full h-full object-cover object-center opacity-35 scale-105 animate-pulse duration-[10000ms]">
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/70 to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs sm:text-sm font-medium mb-6 uppercase tracking-widest animate-bounce">
+                <i class="fa-solid fa-fire text-amber-500"></i> Michelin Guide Recommended 2024
+            </div>
+            <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-white mb-6 leading-tight">
+                Flavors Forged in <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-amber-700">Fire & Spice</span>
+            </h1>
+            <p class="text-stone-300 text-base sm:text-xl max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+                Immerse your senses in a symphony of open-flame cooking, rare spices, and locally sourced artisanal ingredients crafted by Chef Julian Vance.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#menu" class="w-full sm:w-auto bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold px-8 py-4 rounded-full transition shadow-xl shadow-amber-600/20 text-base tracking-wider uppercase flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-utensils"></i> Explore Our Menu
+                </a>
+                <a href="#reservation" class="w-full sm:w-auto bg-stone-900/90 hover:bg-stone-800 text-stone-200 border border-stone-700 font-semibold px-8 py-4 rounded-full transition text-base tracking-wider uppercase flex items-center justify-center gap-3">
+                    <i class="fa-regular fa-calendar-days text-amber-500"></i> Reserve a Table
+                </a>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-20 pt-10 border-t border-stone-800/80 max-w-4xl mx-auto text-left">
+                <div class="bg-stone-900/40 p-4 rounded-xl border border-stone-800/50 backdrop-blur">
+                    <span class="block font-serif text-3xl sm:text-4xl font-bold text-amber-500">15+</span>
+                    <span class="text-xs sm:text-sm text-stone-400 uppercase tracking-wider">Years of Culinary Art</span>
+                </div>
+                <div class="bg-stone-900/40 p-4 rounded-xl border border-stone-800/50 backdrop-blur">
+                    <span class="block font-serif text-3xl sm:text-4xl font-bold text-amber-500">4.9</span>
+                    <span class="text-xs sm:text-sm text-stone-400 uppercase tracking-wider">Rating (2,400+ Reviews)</span>
+                </div>
+                <div class="bg-stone-900/40 p-4 rounded-xl border border-stone-800/50 backdrop-blur">
+                    <span class="block font-serif text-3xl sm:text-4xl font-bold text-amber-500">100%</span>
+                    <span class="text-xs sm:text-sm text-stone-400 uppercase tracking-wider">Organic Local Produce</span>
+                </div>
+                <div class="bg-stone-900/40 p-4 rounded-xl border border-stone-800/50 backdrop-blur">
+                    <span class="block font-serif text-3xl sm:text-4xl font-bold text-amber-500">350+</span>
+                    <span class="text-xs sm:text-sm text-stone-400 uppercase tracking-wider">Curated Wine Cellar</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="py-24 bg-stone-900 border-t border-b border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="space-y-6">
+                    <span class="text-amber-500 uppercase tracking-[0.3em] text-xs font-bold block">The Saffron & Stone Philosophy</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white leading-tight">
+                        Where Ancient Techniques Meet Modern Elegance
+                    </h2>
+                    <p class="text-stone-300 font-light leading-relaxed">
+                        Founded in 2009, Saffron & Stone was born from a singular vision: to honor the primal allure of open-flame cooking while elevating it with sophisticated flavor profiles and immaculate presentation.
+                    </p>
+                    <p class="text-stone-400 font-light leading-relaxed text-sm">
+                        Every cut of meat is hand-selected from pasture-raised heritage breeds, our seafood is wild-caught daily, and our signature saffron is imported directly from generational farms in Kashmir. We believe that true dining is not just sustenance, but an unforgettable memory shared around the table.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 pt-4">
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 shrink-0 text-lg">
+                                <i class="fa-solid fa-wheat-awn"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Farm to Table</h4>
+                                <p class="text-xs text-stone-400 mt-1">Sourced from regional organic farms within 50 miles.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 shrink-0 text-lg">
+                                <i class="fa-solid fa-wine-glass"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Sommelier Curated</h4>
+                                <p class="text-xs text-stone-400 mt-1">Pairings tailored for every dish on our seasonal menu.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative">
+                    <div class="relative z-10 rounded-2xl overflow-hidden border border-stone-700 shadow-2xl">
+                        <img src="https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c?q=80&w=1000&auto=format&fit=crop" alt="Chef preparing meal" class="w-full h-[450px] object-cover hover:scale-105 transition duration-700">
+                    </div>
+                    <!-- Decorative Floating Badge -->
+                    <div class="absolute -bottom-6 -left-6 z-20 bg-stone-950 border border-amber-500/30 p-6 rounded-2xl shadow-2xl max-w-xs hidden sm:block">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 rounded-full bg-amber-600 flex items-center justify-center text-stone-950 text-xl font-bold">
+                                <i class="fa-solid fa-award"></i>
+                            </div>
+                            <div>
+                                <span class="text-amber-500 text-xs font-bold uppercase tracking-wider block">Award Winning</span>
+                                <span class="text-white font-serif font-bold text-lg">Best Fine Dining 2023</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute -top-6 -right-6 w-48 h-48 bg-amber-600/10 rounded-full blur-3xl -z-10"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MENU SECTION -->
+    <section id="menu" class="py-24 bg-stone-950 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-amber-500 uppercase tracking-[0.3em] text-xs font-bold block mb-3">Gastronomic Excellence</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white mb-4">Our Seasonal Menu</h2>
+                <p class="text-stone-400 font-light text-sm sm:text-base">
+                    Explore our meticulously crafted dishes. Click items to view details or add them to your tasting wishlist / order inquiry.
+                </p>
+
+                <!-- Menu Categories Filter Tabs -->
+                <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mt-8" id="menu-tabs">
+                    <button onclick="filterMenu('all')" class="menu-tab active px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition bg-amber-600 text-stone-950 shadow-lg shadow-amber-600/20">
+                        All Items
+                    </button>
+                    <button onclick="filterMenu('starters')" class="menu-tab px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition bg-stone-900 text-stone-300 border border-stone-800 hover:border-amber-600/50">
+                        Starters
+                    </button>
+                    <button onclick="filterMenu('mains')" class="menu-tab px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition bg-stone-900 text-stone-300 border border-stone-800 hover:border-amber-600/50">
+                        Main Courses
+                    </button>
+                    <button onclick="filterMenu('grill')" class="menu-tab px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition bg-stone-900 text-stone-300 border border-stone-800 hover:border-amber-600/50">
+                        Wood-Fired Grill
+                    </button>
+                    <button onclick="filterMenu('desserts')" class="menu-tab px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition bg-stone-900 text-stone-300 border border-stone-800 hover:border-amber-600/50">
+                        Desserts
+                    </button>
+                    <button onclick="filterMenu('drinks')" class="menu-tab px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition bg-stone-900 text-stone-300 border border-stone-800 hover:border-amber-600/50">
+                        Cocktails & Wine
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu Grid -->
+            <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Items injected dynamically via script.js -->
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCE / CHEF'S SPECIAL BANNER -->
+    <section id="experience" class="py-24 bg-stone-900 relative overflow-hidden border-t border-b border-stone-800">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?q=80&w=1920&auto=format&fit=crop" alt="Bar and restaurant interior" class="w-full h-full object-cover opacity-20">
+            <div class="absolute inset-0 bg-stone-900/90"></div>
+        </div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 space-y-6">
+                    <span class="text-amber-500 uppercase tracking-[0.3em] text-xs font-bold block">Chef's Tasting Menu</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white leading-tight">
+                        The 7-Course Royal Flame Experience
+                    </h2>
+                    <p class="text-stone-300 font-light leading-relaxed">
+                        Embark on a gastronomic journey curated personally by Executive Chef Julian Vance. Each course tells a story of heritage, fire, and exotic spices, paired with rare vintage reserves.
+                    </p>
+                    <ul class="space-y-3 text-stone-300 text-sm font-light">
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-amber-500"></i> Amuse-bouche with saffron-infused gin mist</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-amber-500"></i> Wood-roasted bone marrow with wild herb chimichurri</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-amber-500"></i> 45-Day dry-aged Wagyu strip loin over Japanese binchotan charcoal</li>
+                        <li class="flex items-center gap-3"><i class="fa-solid fa-check text-amber-500"></i> Artisan smoked chocolate tart with gold leaf</li>
+                    </ul>
+                    <div class="pt-4 flex items-center gap-6">
+                        <div>
+                            <span class="text-xs text-stone-400 block uppercase">Price per person</span>
+                            <span class="font-serif text-3xl font-bold text-amber-500">$185</span>
+                            <span class="text-xs text-stone-400 block">+ $95 optional wine pairing</span>
+                        </div>
+                        <a href="#reservation" class="bg-amber-600 hover:bg-amber-500 text-stone-950 font-semibold px-8 py-4 rounded-full transition uppercase text-sm tracking-wider shadow-lg shadow-amber-600/20">
+                            Book Tasting
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 bg-stone-950/80 p-8 rounded-2xl border border-stone-800 shadow-2xl backdrop-blur">
+                    <h3 class="font-serif text-2xl font-bold text-white mb-6 border-b border-stone-800 pb-4">Reserve Your Experience</h3>
+                    <form id="quick-booking-form" onsubmit="handleQuickBooking(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Full Name</label>
+                            <input type="text" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-600 transition" placeholder="Alexander Wright">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Date</label>
+                                <input type="date" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-600 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Guests</label>
+                                <select class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-600 transition">
+                                    <option>2 Guests</option>
+                                    <option>4 Guests</option>
+                                    <option>6 Guests</option>
+                                    <option>8+ (Private Party)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold py-3.5 rounded-xl transition uppercase text-sm tracking-wider shadow-lg shadow-amber-600/20 mt-2">
+                            Instant Table Reservation
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- REVIEWS / TESTIMONIALS -->
+    <section id="reviews" class="py-24 bg-stone-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-amber-500 uppercase tracking-[0.3em] text-xs font-bold block mb-3">Guest Testimonials</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white mb-4">Praised by Critics & Connoisseurs</h2>
+                <p class="text-stone-400 font-light text-sm sm:text-base">Read what food critics and valued guests have to say about their evening at Saffron & Stone.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Review 1 -->
+                <div class="bg-stone-900/60 p-8 rounded-2xl border border-stone-800 flex flex-col justify-between hover:border-amber-600/40 transition">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-500 text-sm mb-4">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-stone-300 font-light italic text-sm leading-relaxed">
+                            "The dry-aged Tomahawk cooked over binchotan charcoal is an absolute revelation. Combined with their signature saffron cocktail, it’s easily the best dining experience in the city this year."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-8 pt-6 border-t border-stone-800">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop" alt="Reviewer" class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Victoria Sterling</h4>
+                            <span class="text-xs text-stone-400">Culinary Editor, Epicurean Magazine</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 2 -->
+                <div class="bg-stone-900/60 p-8 rounded-2xl border border-stone-800 flex flex-col justify-between hover:border-amber-600/40 transition">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-500 text-sm mb-4">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-stone-300 font-light italic text-sm leading-relaxed">
+                            "We celebrated our 10th anniversary here and the staff went above and beyond. The ambiance is sultry and romantic, and the 7-course tasting menu was a masterpiece from start to finish."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-8 pt-6 border-t border-stone-800">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=150&auto=format&fit=crop" alt="Reviewer" class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-white text-sm">Marcus & Elena Vance</h4>
+                            <span class="text-xs text-stone-400">Verified Diners</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Review 3 -->
+                <div class="bg-stone-900/60 p-8 rounded-2xl border border-stone-800 flex flex-col justify-between hover:border-amber-600/40 transition">
+                    <div>
+                        <div class="flex items-center gap-1 text-amber-500 text-sm mb-4">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                        </div>
+                        <p class="text-stone-300 font-light italic text-sm leading-relaxed">
+                            "As a sommelier, I am hard to impress with wine pairings. Saffron & Stone's cellar list is breathtaking, and their sommelier guided us to a phenomenal Burgundian red that elevated our meal immensely."
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-4 mt-8 pt-6 border-t border-stone-800">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=150&auto=format&fit=crop" alt="Reviewer" class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-white text-sm">David Henderson</h4>
+                            <span class="text-xs text-stone-400">Master Sommelier</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESERVATION & CONTACT SECTION -->
+    <section id="contact" class="py-24 bg-stone-900 border-t border-stone-800 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span id="reservation" class="text-amber-500 uppercase tracking-[0.3em] text-xs font-bold block mb-3">Get in Touch</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white mb-4">Reservations & Location</h2>
+                <p class="text-stone-400 font-light text-sm sm:text-base">We invite you to join us for an extraordinary evening. Secure your table or reach out for private dining inquiries.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                <!-- Contact Details & Info -->
+                <div class="lg:col-span-5 space-y-8">
+                    <div class="bg-stone-950 p-8 rounded-2xl border border-stone-800 space-y-6">
+                        <h3 class="font-serif text-2xl font-bold text-white">Visit & Connect</h3>
+                        <div class="space-y-4 text-stone-300 text-sm">
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <div>
+                                    <strong class="block text-white">Address</strong>
+                                    <span>742 Evergreen Terrace, Culinary District, Metropolis 10021</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <div>
+                                    <strong class="block text-white">Phone Reservations</strong>
+                                    <a href="tel:+15554328900" class="hover:text-amber-500 transition">(555) 432-8900</a>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                                    <i class="fa-solid fa-envelope"></i>
+                                </div>
+                                <div>
+                                    <strong class="block text-white">Email Inquiries</strong>
+                                    <a href="mailto:concierge@saffronandstone.com" class="hover:text-amber-500 transition">concierge@saffronandstone.com</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="border-t border-stone-800 pt-6">
+                            <h4 class="font-serif font-bold text-white mb-3">Operating Hours</h4>
+                            <ul class="space-y-2 text-xs text-stone-400">
+                                <li class="flex justify-between"><span>Tuesday – Thursday:</span> <span class="text-stone-200">5:00 PM – 10:30 PM</span></li>
+                                <li class="flex justify-between"><span>Friday – Saturday:</span> <span class="text-stone-200">5:00 PM – 11:30 PM</span></li>
+                                <li class="flex justify-between"><span>Sunday:</span> <span class="text-stone-200">4:30 PM – 10:00 PM</span></li>
+                                <li class="flex justify-between text-amber-500 font-semibold"><span>Monday:</span> <span>Closed for Sommelier Tasting Prep</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Booking / Contact Form -->
+                <div class="lg:col-span-7 bg-stone-950 p-8 sm:p-10 rounded-2xl border border-stone-800">
+                    <h3 class="font-serif text-2xl font-bold text-white mb-6">Table Reservation Form</h3>
+                    <form id="main-contact-form" onsubmit="handleMainContact(event)" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Your Full Name *</label>
+                                <input type="text" id="contact-name" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none focus:border-amber-600 transition" placeholder="John Doe">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Phone Number *</label>
+                                <input type="tel" id="contact-phone" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none focus:border-amber-600 transition" placeholder="(555) 000-0000">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Date *</label>
+                                <input type="date" id="contact-date" required class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none focus:border-amber-600 transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Time *</label>
+                                <select id="contact-time" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none focus:border-amber-600 transition">
+                                    <option>5:00 PM</option>
+                                    <option>6:00 PM</option>
+                                    <option>7:00 PM (Prime)</option>
+                                    <option>8:00 PM (Prime)</option>
+                                    <option>9:00 PM</option>
+                                    <option>10:00 PM</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Guests *</label>
+                                <select id="contact-guests" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none focus:border-amber-600 transition">
+                                    <option>1 Guest</option>
+                                    <option selected>2 Guests</option>
+                                    <option>3 Guests</option>
+                                    <option>4 Guests</option>
+                                    <option>5 Guests</option>
+                                    <option>6+ Guests</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Special Dietary Requirements or Occasion</label>
+                            <textarea id="contact-notes" rows="3" class="w-full bg-stone-900 border border-stone-800 rounded-xl px-4 py-3.5 text-white text-sm focus:outline-none focus:border-amber-600 transition" placeholder="Anniversary celebration, peanut allergy, window seating preference..."></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold py-4 rounded-xl transition uppercase text-sm tracking-wider shadow-xl shadow-amber-600/20">
+                            Confirm Table Reservation
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-stone-950 border-t border-stone-900 py-16 text-stone-400 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <div class="space-y-4 md:col-span-1">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-amber-600 flex items-center justify-center text-stone-950 font-serif font-bold text-lg">
+                            S
+                        </div>
+                        <span class="font-serif text-xl font-bold tracking-wider text-white">SAFFRON & STONE</span>
+                    </div>
+                    <p class="text-xs text-stone-400 leading-relaxed">
+                        An extraordinary culinary sanctuary celebrating open flames, artisanal spices, and unforgettable moments.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="font-serif font-bold text-white mb-4 text-base">Quick Links</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#home" class="hover:text-amber-500 transition">Home</a></li>
+                        <li><a href="#about" class="hover:text-amber-500 transition">Our Philosophy</a></li>
+                        <li><a href="#menu" class="hover:text-amber-500 transition">Seasonal Menu</a></li>
+                        <li><a href="#experience" class="hover:text-amber-500 transition">Tasting Experience</a></li>
+                        <li><a href="#contact" class="hover:text-amber-500 transition">Reservations & Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-serif font-bold text-white mb-4 text-base">Menu Highlights</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#menu" class="hover:text-amber-500 transition">Wagyu Tomahawk</a></li>
+                        <li><a href="#menu" class="hover:text-amber-500 transition">Saffron Pan-Seared Scallops</a></li>
+                        <li><a href="#menu" class="hover:text-amber-500 transition">Truffle Wild Mushroom Risotto</a></li>
+                        <li><a href="#menu" class="hover:text-amber-500 transition">Smoked Bourbon Old Fashioned</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-serif font-bold text-white mb-4 text-base">Newsletter</h4>
+                    <p class="text-xs text-stone-400 mb-4">Subscribe to receive secret tasting invitations and seasonal menu drops.</p>
+                    <form onsubmit="handleNewsletter(event)" class="flex gap-2">
+                        <input type="email" required placeholder="Your email" class="bg-stone-900 border border-stone-800 rounded-lg px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-600 w-full">
+                        <button type="submit" class="bg-amber-600 hover:bg-amber-500 text-stone-950 px-4 py-2 rounded-lg font-bold text-xs uppercase transition shrink-0">Join</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="border-t border-stone-900 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs gap-4">
+                <p>&copy; 2024 Saffron & Stone Restaurant Group. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-amber-500 transition">Privacy Policy</a>
+                    <a href="#" class="hover:text-amber-500 transition">Terms of Service</a>
+                    <a href="#" class="hover:text-amber-500 transition">Accessibility</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- CART / WISHLIST MODAL -->
+    <div id="cart-modal" class="fixed inset-0 z-50 bg-stone-950/80 backdrop-blur-sm hidden flex justify-end">
+        <div class="bg-stone-950 border-l border-stone-800 w-full max-w-md h-full flex flex-col justify-between p-6 sm:p-8 animate-slide-left">
+            <div>
+                <div class="flex items-center justify-between border-b border-stone-800 pb-4 mb-6">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-bag-shopping text-amber-500 text-xl"></i>
+                        <h3 class="font-serif text-xl font-bold text-white">Your Tasting Wishlist</h3>
+                    </div>
+                    <button onclick="closeCartModal()" class="text-stone-400 hover:text-white p-2">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <div id="cart-items" class="space-y-4 max-h-[50vh] overflow-y-auto pr-2">
+                    <!-- Dynamic cart items -->
+                </div>
+            </div>
+
+            <div class="border-t border-stone-800 pt-6 space-y-4">
+                <div class="flex justify-between items-center text-sm">
+                    <span class="text-stone-400 uppercase tracking-wider">Estimated Total</span>
+                    <span id="cart-total" class="font-serif text-2xl font-bold text-amber-500">$0.00</span>
+                </div>
+                <button onclick="checkoutCart()" class="w-full bg-amber-600 hover:bg-amber-500 text-stone-950 font-bold py-3.5 rounded-xl transition uppercase text-sm tracking-wider shadow-lg shadow-amber-600/20">
+                    Request Tasting Order Inquiry
+                </button>
+                <p class="text-[10px] text-center text-stone-500">Items added here represent menu selections for your table reservation or takeout inquiry.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ITEM DETAIL MODAL -->
+    <div id="item-modal" class="fixed inset-0 z-50 bg-stone-950/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-stone-900 border border-stone-800 rounded-2xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl animate-fade-in">
+            <button onclick="closeItemModal()" class="absolute top-4 right-4 text-stone-400 hover:text-white p-2">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div id="item-modal-content">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-amber-600 text-stone-950 px-6 py-3.5 rounded-xl shadow-2xl font-bold text-sm tracking-wide translate-y-24 opacity-0 transition-all duration-300 flex items-center gap-3">
+        <i class="fa-solid fa-circle-check text-lg"></i>
+        <span id="toast-msg">Item added to your wishlist!</span>
+    </div>
+
+    <!-- SCRIPT -->
+    <script src="script.js"></script>
+</body>
+</html>

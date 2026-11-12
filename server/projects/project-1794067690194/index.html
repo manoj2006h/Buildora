@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savoria | Fine Dining & Artisan Kitchen</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fdf8f6',
+                            100: '#fbe8e6',
+                            500: '#d97706',
+                            600: '#b45309',
+                            700: '#92400e',
+                            900: '#78350f',
+                            dark: '#111827',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .hero-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-sans antialiased selection:bg-amber-500 selection:text-white">
+
+    <!-- Header / Navigation -->
+    <header id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-gray-950/80 backdrop-blur-md border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="#" class="flex items-center gap-2 group">
+                <div class="w-10 h-10 rounded-full bg-amber-500 flex items-center justify-center text-gray-950 font-serif font-bold text-xl shadow-lg shadow-amber-500/20 group-hover:scale-105 transition-transform">
+                    S
+                </div>
+                <span class="font-serif text-2xl font-bold tracking-wider text-white">SAVORIA</span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="text-amber-400 font-medium hover:text-amber-400 transition-colors">Home</a>
+                <a href="#about" class="text-gray-300 font-medium hover:text-amber-400 transition-colors">About Us</a>
+                <a href="#menu" class="text-gray-300 font-medium hover:text-amber-400 transition-colors">Menu</a>
+                <a href="#specials" class="text-gray-300 font-medium hover:text-amber-400 transition-colors">Chef Specials</a>
+                <a href="#gallery" class="text-gray-300 font-medium hover:text-amber-400 transition-colors">Gallery</a>
+                <a href="#contact" class="text-gray-300 font-medium hover:text-amber-400 transition-colors">Contact</a>
+            </nav>
+
+            <div class="hidden md:flex items-center space-x-4">
+                <a href="#reservation" class="bg-amber-500 hover:bg-amber-600 text-gray-950 px-5 py-2.5 rounded-full font-semibold transition-all shadow-lg shadow-amber-500/20 hover:shadow-amber-500/40">
+                    Book a Table
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="menu-btn" class="md:hidden text-gray-300 hover:text-white focus:outline-none p-2">
+                <i class="fa-solid fa-bars text-2xl"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobile-menu" class="hidden md:hidden bg-gray-950 border-b border-gray-800 px-6 py-6 space-y-4">
+            <a href="#home" class="block text-amber-400 font-medium py-2">Home</a>
+            <a href="#about" class="block text-gray-300 font-medium py-2 hover:text-amber-400">About Us</a>
+            <a href="#menu" class="block text-gray-300 font-medium py-2 hover:text-amber-400">Menu</a>
+            <a href="#specials" class="block text-gray-300 font-medium py-2 hover:text-amber-400">Chef Specials</a>
+            <a href="#gallery" class="block text-gray-300 font-medium py-2 hover:text-amber-400">Gallery</a>
+            <a href="#contact" class="block text-gray-300 font-medium py-2 hover:text-amber-400">Contact</a>
+            <div class="pt-2">
+                <a href="#reservation" class="block text-center bg-amber-500 hover:bg-amber-600 text-gray-950 px-5 py-3 rounded-full font-semibold transition-all">
+                    Book a Table
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg min-h-screen flex items-center justify-center text-center px-4 pt-20">
+        <div class="max-w-4xl mx-auto space-y-8 animate-fade-in">
+            <span class="inline-block uppercase tracking-[0.3em] text-amber-400 text-sm font-semibold bg-amber-400/10 px-4 py-1.5 rounded-full border border-amber-400/20">
+                Welcome to Culinary Excellence
+            </span>
+            <h1 class="font-serif text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white leading-tight">
+                Experience Food That <span class="text-amber-500 italic">Inspires</span>
+            </h1>
+            <p class="text-gray-300 text-lg sm:text-xl max-w-2xl mx-auto font-light leading-relaxed">
+                Indulge in seasonal artisan dishes prepared with passion, precision, and the freshest local ingredients by award-winning chefs.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                <a href="#menu" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold px-8 py-4 rounded-full transition-all shadow-xl shadow-amber-500/20 text-center">
+                    Explore Our Menu
+                </a>
+                <a href="#reservation" class="w-full sm:w-auto bg-gray-800/80 hover:bg-gray-800 text-white font-semibold px-8 py-4 rounded-full border border-gray-700 transition-all text-center">
+                    Reserve a Table
+                </a>
+            </div>
+            
+            <div class="pt-12 grid grid-cols-3 gap-4 max-w-lg mx-auto border-t border-gray-800 text-center">
+                <div>
+                    <p class="font-serif text-2xl font-bold text-amber-400">15+</p>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">Master Chefs</p>
+                </div>
+                <div>
+                    <p class="font-serif text-2xl font-bold text-amber-400">30+</p>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">Signature Dishes</p>
+                </div>
+                <div>
+                    <p class="font-serif text-2xl font-bold text-amber-400">4.9</p>
+                    <p class="text-xs text-gray-400 uppercase tracking-wider mt-1">Guest Rating</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 bg-gray-950 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                <div class="space-y-6">
+                    <span class="text-amber-500 font-semibold tracking-widest uppercase text-sm">Our Story</span>
+                    <h2 class="font-serif text-4xl sm:text-5xl font-bold text-white leading-tight">
+                        A Passion for Unforgettable Flavors
+                    </h2>
+                    <p class="text-gray-300 leading-relaxed font-light">
+                        Founded in 2018, Savoria was born out of a profound love for traditional culinary arts blended with modern gastronomy. Every plate tells a story of farm-to-table freshness, meticulous craftsmanship, and uncompromising taste.
+                    </p>
+                    <p class="text-gray-400 leading-relaxed font-light">
+                        Our executive chef works hand-in-hand with organic local farmers and coastal fishermen to source only the finest ingredients of the season. Whether you're celebrating a milestone or enjoying a quiet evening, Savoria offers a warm, sophisticated atmosphere.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6 pt-4">
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-seedling text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">100% Organic</h4>
+                                <p class="text-xs text-gray-400 mt-0.5">Sourced from local sustainable farms.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <div class="w-10 h-10 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-utensils text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-sm">Master Chefs</h4>
+                                <p class="text-xs text-gray-400 mt-0.5">Decades of international experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="relative grid grid-cols-2 gap-4">
+                    <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80" alt="Restaurant Interior" class="rounded-2xl shadow-2xl object-cover h-72 w-full">
+                    <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Delicious Dish" class="rounded-2xl shadow-2xl object-cover h-72 w-full mt-8">
+                    <div class="absolute -bottom-6 -left-6 bg-amber-500 text-gray-950 p-6 rounded-2xl shadow-2xl hidden sm:block">
+                        <p class="font-serif font-bold text-3xl">6+</p>
+                        <p class="text-xs font-semibold uppercase tracking-wider">Years of Excellence</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu Section -->
+    <section id="menu" class="py-24 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto space-y-4 mb-16">
+                <span class="text-amber-500 font-semibold tracking-widest uppercase text-sm">Discover</span>
+                <h2 class="font-serif text-4xl sm:text-5xl font-bold text-white">Our Artisan Menu</h2>
+                <p class="text-gray-400 font-light">Explore our carefully curated selection of starters, mains, desserts, and handcrafted cocktails.</p>
+                
+                <!-- Menu Filter Buttons -->
+                <div class="flex flex-wrap items-center justify-center gap-2 pt-6" id="menu-filters">
+                    <button data-filter="all" class="menu-filter-btn active bg-amber-500 text-gray-950 px-6 py-2 rounded-full font-medium text-sm transition-all shadow-md">All Items</button>
+                    <button data-filter="starters" class="menu-filter-btn bg-gray-800 text-gray-300 hover:bg-gray-700 px-6 py-2 rounded-full font-medium text-sm transition-all">Starters</button>
+                    <button data-filter="mains" class="menu-filter-btn bg-gray-800 text-gray-300 hover:bg-gray-700 px-6 py-2 rounded-full font-medium text-sm transition-all">Main Courses</button>
+                    <button data-filter="desserts" class="menu-filter-btn bg-gray-800 text-gray-300 hover:bg-gray-700 px-6 py-2 rounded-full font-medium text-sm transition-all">Desserts</button>
+                    <button data-filter="drinks" class="menu-filter-btn bg-gray-800 text-gray-300 hover:bg-gray-700 px-6 py-2 rounded-full font-medium text-sm transition-all">Beverages</button>
+                </div>
+            </div>
+
+            <!-- Menu Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl mx-auto" id="menu-container">
+                
+                <!-- Item 1: Starter -->
+                <div data-category="starters" class="menu-item bg-gray-950 p-6 rounded-2xl border border-gray-800 flex gap-4 items-center hover:border-amber-500/50 transition-all group">
+                    <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=200&q=80" alt="Truffle Burrata" class="w-24 h-24 object-cover rounded-xl shrink-0 group-hover:scale-105 transition-transform">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-baseline border-b border-gray-800 pb-2 mb-2">
+                            <h3 class="font-serif text-lg font-bold text-white group-hover:text-amber-400 transition-colors">Truffle Burrata Salad</h3>
+                            <span class="text-amber-400 font-bold text-lg">$18.50</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-light">Fresh artisanal burrata, heirloom tomatoes, black truffle oil, aged balsamic glaze, and crispy basil leaves.</p>
+                    </div>
+                </div>
+
+                <!-- Item 2: Starter -->
+                <div data-category="starters" class="menu-item bg-gray-950 p-6 rounded-2xl border border-gray-800 flex gap-4 items-center hover:border-amber-500/50 transition-all group">
+                    <img src="https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=200&q=80" alt="Pan-Seared Scallops" class="w-24 h-24 object-cover rounded-xl shrink-0 group-hover:scale-105 transition-transform">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-baseline border-b border-gray-800 pb-2 mb-2">
+                            <h3 class="font-serif text-lg font-bold text-white group-hover:text-amber-400 transition-colors">Pan-Seared Scallops</h3>
+                            <span class="text-amber-400 font-bold text-lg">$22.00</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-light">Hokkaido scallops, cauliflower purée, crispy pancetta, and citrus herb butter reduction.</p>
+                    </div>
+                </div>
+
+                <!-- Item 3: Main -->
+                <div data-category="mains" class="menu-item bg-gray-950 p-6 rounded-2xl border border-gray-800 flex gap-4 items-center hover:border-amber-500/50 transition-all group">
+                    <img src="https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=200&q=80" alt="Wagyu Ribeye Steak" class="w-24 h-24 object-cover rounded-xl shrink-0 group-hover:scale-105 transition-transform">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-baseline border-b border-gray-800 pb-2 mb-2">
+                            <h3 class="font-serif text-lg font-bold text-white group-hover:text-amber-400 transition-colors">A5 Wagyu Ribeye</h3>
+                            <span class="text-amber-400 font-bold text-lg">$65.00</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-light">Grade A5 Japanese Wagyu, roasted garlic herb butter, roasted asparagus, and truffle potato mash.</p>
+                    </div>
+                </div>
+
+                <!-- Item 4: Main -->
+                <div data-category="mains" class="menu-item bg-gray-950 p-6 rounded-2xl border border-gray-800 flex gap-4 items-center hover:border-amber-500/50 transition-all group">
+                    <img src="https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=200&q=80" alt="Grilled Chilean Sea Bass" class="w-24 h-24 object-cover rounded-xl shrink-0 group-hover:scale-105 transition-transform">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-baseline border-b border-gray-800 pb-2 mb-2">
+                            <h3 class="font-serif text-lg font-bold text-white group-hover:text-amber-400 transition-colors">Chilean Sea Bass</h3>
+                            <span class="text-amber-400 font-bold text-lg">$42.00</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-light">Miso-glazed sea bass served over wild mushroom risotto and baby bok choy.</p>
+                    </div>
+                </div>
+
+                <!-- Item 5: Desserts -->
+                <div data-category="desserts" class="menu-item bg-gray-950 p-6 rounded-2xl border border-gray-800 flex gap-4 items-center hover:border-amber-500/50 transition-all group">
+                    <img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=200&q=80" alt="Chocolate Lava Cake" class="w-24 h-24 object-cover rounded-xl shrink-0 group-hover:scale-105 transition-transform">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-baseline border-b border-gray-800 pb-2 mb-2">
+                            <h3 class="font-serif text-lg font-bold text-white group-hover:text-amber-400 transition-colors">Molten Chocolate Cake</h3>
+                            <span class="text-amber-400 font-bold text-lg">$14.00</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-light">Valrhona dark chocolate cake with a molten center, served with Madagascar vanilla bean gelato.</p>
+                    </div>
+                </div>
+
+                <!-- Item 6: Desserts -->
+                <div data-category="desserts" class="menu-item bg-gray-950 p-6 rounded-2xl border border-gray-800 flex gap-4 items-center hover:border-amber-500/50 transition-all group">
+                    <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=200&q=80" alt="Berry Tart" class="w-24 h-24 object-cover rounded-xl shrink-0 group-hover:scale-105 transition-transform">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-baseline border-b border-gray-800 pb-2 mb-2">
+                            <h3 class="font-serif text-lg font-bold text-white group-hover:text-amber-400 transition-colors">Vanilla Bean Berry Tart</h3>
+                            <span class="text-amber-400 font-bold text-lg">$12.50</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-light">Buttery pastry crust filled with mascarpone cream, topped with fresh seasonal wild berries.</p>
+                    </div>
+                </div>
+
+                <!-- Item 7: Drinks -->
+                <div data-category="drinks" class="menu-item bg-gray-950 p-6 rounded-2xl border border-gray-800 flex gap-4 items-center hover:border-amber-500/50 transition-all group">
+                    <img src="https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=200&q=80" alt="Smoked Old Fashioned" class="w-24 h-24 object-cover rounded-xl shrink-0 group-hover:scale-105 transition-transform">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-baseline border-b border-gray-800 pb-2 mb-2">
+                            <h3 class="font-serif text-lg font-bold text-white group-hover:text-amber-400 transition-colors">Smoked Old Fashioned</h3>
+                            <span class="text-amber-400 font-bold text-lg">$16.00</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-light">Woodford Reserve bourbon, angostura bitters, organic maple syrup, infused with oak smoke.</p>
+                    </div>
+                </div>
+
+                <!-- Item 8: Drinks -->
+                <div data-category="drinks" class="menu-item bg-gray-950 p-6 rounded-2xl border border-gray-800 flex gap-4 items-center hover:border-amber-500/50 transition-all group">
+                    <img src="https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=200&q=80" alt="Passionfruit Mojito" class="w-24 h-24 object-cover rounded-xl shrink-0 group-hover:scale-105 transition-transform">
+                    <div class="flex-1">
+                        <div class="flex justify-between items-baseline border-b border-gray-800 pb-2 mb-2">
+                            <h3 class="font-serif text-lg font-bold text-white group-hover:text-amber-400 transition-colors">Passionfruit Mojito</h3>
+                            <span class="text-amber-400 font-bold text-lg">$15.00</span>
+                        </div>
+                        <p class="text-xs text-gray-400 font-light">White rum, fresh passionfruit purée, mint leaves, lime juice, and sparkling club soda.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Chef Specials Section -->
+    <section id="specials" class="py-24 bg-gray-950 border-t border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto space-y-4 mb-16">
+                <span class="text-amber-500 font-semibold tracking-widest uppercase text-sm">Handcrafted</span>
+                <h2 class="font-serif text-4xl sm:text-5xl font-bold text-white">Chef's Weekly Specials</h2>
+                <p class="text-gray-400 font-light">Exclusive dishes crafted for a limited time only.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Special 1 -->
+                <div class="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-amber-500/40 transition-all group">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80" alt="Lobster Thermidor" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <span class="absolute top-4 right-4 bg-amber-500 text-gray-950 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Limited</span>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-serif text-xl font-bold text-white">Maine Lobster Thermidor</h3>
+                            <span class="text-amber-400 font-bold text-xl">$48.00</span>
+                        </div>
+                        <p class="text-gray-400 text-sm font-light">Fresh Maine lobster tail baked in a rich creamy gruyère, cognac, and mustard sauce.</p>
+                        <a href="#reservation" class="inline-block text-amber-400 font-semibold text-sm hover:text-amber-300 transition-colors">
+                            Reserve to Taste &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Special 2 -->
+                <div class="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-amber-500/40 transition-all group">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80" alt="Duck Confit" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <span class="absolute top-4 right-4 bg-amber-500 text-gray-950 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Chef's Pick</span>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-serif text-xl font-bold text-white">Crispy Duck Confit</h3>
+                            <span class="text-amber-400 font-bold text-xl">$38.00</span>
+                        </div>
+                        <p class="text-gray-400 text-sm font-light">Slow-roasted duck leg with crispy skin, served with cherry reduction and parsnip mash.</p>
+                        <a href="#reservation" class="inline-block text-amber-400 font-semibold text-sm hover:text-amber-300 transition-colors">
+                            Reserve to Taste &rarr;
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Special 3 -->
+                <div class="bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-amber-500/40 transition-all group">
+                    <div class="relative overflow-hidden h-64">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Saffron Risotto" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <span class="absolute top-4 right-4 bg-amber-500 text-gray-950 font-bold text-xs px-3 py-1 rounded-full uppercase tracking-wider">Seasonal</span>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-serif text-xl font-bold text-white">Royal Saffron Risotto</h3>
+                            <span class="text-amber-400 font-bold text-xl">$32.00</span>
+                        </div>
+                        <p class="text-gray-400 text-sm font-light">Carnaroli rice infused with golden Spanish saffron, wild chanterelles, and aged parmesan.</p>
+                        <a href="#reservation" class="inline-block text-amber-400 font-semibold text-sm hover:text-amber-300 transition-colors">
+                            Reserve to Taste &rarr;
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-24 bg-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto space-y-4 mb-16">
+                <span class="text-amber-500 font-semibold tracking-widest uppercase text-sm">Visual Journey</span>
+                <h2 class="font-serif text-4xl sm:text-5xl font-bold text-white">Restaurant Gallery</h2>
+                <p class="text-gray-400 font-light">A glimpse into our ambiance, dishes, and culinary passion.</p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="overflow-hidden rounded-xl h-60">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=80" alt="Ambiance" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                </div>
+                <div class="overflow-hidden rounded-xl h-60">
+                    <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=600&q=80" alt="Fresh Salad" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                </div>
+                <div class="overflow-hidden rounded-xl h-60">
+                    <img src="https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=600&q=80" alt="Chef Cooking" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                </div>
+                <div class="overflow-hidden rounded-xl h-60">
+                    <img src="https://images.unsplash.com/photo-1578474846511-04ba529f0b88?auto=format&fit=crop&w=600&q=80" alt="Dining Table" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reservation & Contact Section -->
+    <section id="contact" class="py-24 bg-gray-950 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                
+                <!-- Left: Contact & Info -->
+                <div class="space-y-8">
+                    <div>
+                        <span class="text-amber-500 font-semibold tracking-widest uppercase text-sm">Get in Touch</span>
+                        <h2 class="font-serif text-4xl sm:text-5xl font-bold text-white mt-2">Contact & Location</h2>
+                        <p class="text-gray-400 font-light mt-3">We would love to hear from you. Reach out for reservations, private events, or inquiries.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-location-dot text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Location</h4>
+                                <p class="text-gray-400 text-sm mt-1">742 Evergreen Terrace, Gourmet District, New York, NY 10012</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-phone text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Phone Number</h4>
+                                <p class="text-gray-400 text-sm mt-1">+1 (555) 389-4920</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-envelope text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Email Address</h4>
+                                <p class="text-gray-400 text-sm mt-1">reservations@savoriarestaurant.com</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-500 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-clock text-xl"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Opening Hours</h4>
+                                <p class="text-gray-400 text-sm mt-1">Mon – Fri: 11:00 AM – 10:30 PM</p>
+                                <p class="text-gray-400 text-sm">Sat – Sun: 10:00 AM – 11:30 PM</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Reservation Form -->
+                <div id="reservation" class="bg-gray-900 p-8 sm:p-10 rounded-3xl border border-gray-800 shadow-2xl relative">
+                    <h3 class="font-serif text-2xl font-bold text-white mb-2">Reserve a Table</h3>
+                    <p class="text-gray-400 text-sm mb-6">Book your table online instantly. We look forward to hosting you.</p>
+
+                    <form id="reservation-form" class="space-y-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Full Name</label>
+                                <input type="text" id="res-name" required placeholder="John Doe" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Phone Number</label>
+                                <input type="tel" id="res-phone" required placeholder="+1 (555) 000-0000" class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 text-sm">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Date</label>
+                                <input type="date" id="res-date" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Time</label>
+                                <select id="res-time" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 text-sm">
+                                    <option value="">Select Time</option>
+                                    <option value="12:00 PM">12:00 PM</option>
+                                    <option value="01:00 PM">01:00 PM</option>
+                                    <option value="06:00 PM">06:00 PM</option>
+                                    <option value="07:30 PM">07:30 PM</option>
+                                    <option value="09:00 PM">09:00 PM</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Guests</label>
+                                <select id="res-guests" required class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-amber-500 text-sm">
+                                    <option value="1">1 Person</option>
+                                    <option value="2" selected>2 People</option>
+                                    <option value="4">4 People</option>
+                                    <option value="6">6 People</option>
+                                    <option value="8+">8+ People</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Special Requests (Optional)</label>
+                            <textarea id="res-notes" rows="3" placeholder="Dietary restrictions, anniversary, seating preference..." class="w-full bg-gray-950 border border-gray-800 rounded-xl px-4 py-3 text-white placeholder-gray-600 focus:outline-none focus:border-amber-500 text-sm"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold py-4 rounded-xl transition-all shadow-lg shadow-amber-500/20 text-center">
+                            Confirm Reservation
+                        </button>
+                    </form>
+
+                    <!-- Success Notification Toast -->
+                    <div id="success-toast" class="hidden mt-4 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 p-4 rounded-xl text-center text-sm">
+                        <i class="fa-solid fa-circle-check mr-2"></i> Table reserved successfully! We have sent a confirmation email.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-950 border-t border-gray-900 py-12 text-center text-gray-500 text-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+            <div class="flex items-center justify-center gap-2">
+                <div class="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-gray-950 font-serif font-bold text-lg">
+                    S
+                </div>
+                <span class="font-serif text-xl font-bold tracking-wider text-white">SAVORIA</span>
+            </div>
+            <p class="max-w-md mx-auto text-gray-400 font-light text-xs">
+                Elevating dining through passion, artistry, and the finest seasonal ingredients.
+            </p>
+            <div class="flex justify-center space-x-6 text-lg">
+                <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-facebook"></i></a>
+                <a href="#" class="text-gray-400 hover:text-amber-400 transition-colors"><i class="fa-brands fa-tripadvisor"></i></a>
+            </div>
+            <p class="text-xs text-gray-600">
+                &copy; <span id="current-year"></span> Savoria Restaurant. All rights reserved. Built with HTML, Tailwind CSS & Vanilla JS.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>

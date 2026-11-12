@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 // Backend URL. Override with VITE_API_URL when the API is on another origin.
 const API_BASE =
-  import.meta.env.VITE_API_URL ?? "http://localhost:5001";
+  import.meta.env.VITE_API_URL ?? "https://buildora-1vbi.onrender.com";
 
 function App() {
   const [prompt, setPrompt] = useState("");
