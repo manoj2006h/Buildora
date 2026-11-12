@@ -9,6 +9,11 @@ import { publishProject } from "./vercel.js";
 
 const app = express();
 
+// Behind Render/Vercel the app receives plain HTTP internally while the
+// public request is HTTPS. Trust the proxy so `req.protocol` reflects
+// X-Forwarded-Proto and preview iframes are not blocked as mixed content.
+app.set("trust proxy", true);
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 

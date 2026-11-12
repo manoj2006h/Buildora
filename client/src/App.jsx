@@ -4,6 +4,22 @@ import { useEffect, useRef, useState } from "react";
 const API_BASE =
   import.meta.env.VITE_API_URL ?? "https://buildora-1vbi.onrender.com";
 
+// Browsers block http:// iframes inside an https:// page (mixed content),
+// which shows up as a blank preview. Upgrade the URL when the app is served
+// over https so the embedded preview loads.
+function normalizePreviewUrl(url) {
+  if (!url) return url;
+
+  const isSecurePage =
+    typeof window !== "undefined" && window.location.protocol === "https:";
+
+  if (isSecurePage) {
+    return url.replace(/^http:\/\//i, "https://");
+  }
+
+  return url;
+}
+
 function App() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -92,7 +108,7 @@ function App() {
 
     if (event.type === "done") {
       setResponse(event.result || "");
-      setPreviewUrl(event.previewUrl || "");
+      setPreviewUrl(normalizePreviewUrl(event.previewUrl || ""));
       setProjectId(event.projectId || "");
       setProgress((prev) => prev.map((item) => ({ ...item, active: false })));
     }
