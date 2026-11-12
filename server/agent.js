@@ -291,7 +291,7 @@ export async function runAgent(
             const response = await ai.models.generateContent({
 
                 // Use the model available in your Gemini setup
-                model: "gemini-3.5-flash-lite",
+                model: "gemini-3.1-flash-lite",
 
                 contents: History,
 
