@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 // Backend URL. Override with VITE_API_URL when the API is on another origin.
 const API_BASE =
-  import.meta.env.VITE_API_URL ?? "https://buildora-1vbi.onrender.com";
+  import.meta.env.VITE_API_URL ?? "https://buildora-1-w1f1.onrender.com";
 
 // Browsers block http:// iframes inside an https:// page (mixed content),
 // which shows up as a blank preview. Upgrade the URL when the app is served
